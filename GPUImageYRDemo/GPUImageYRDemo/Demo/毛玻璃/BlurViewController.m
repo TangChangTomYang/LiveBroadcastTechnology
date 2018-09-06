@@ -10,15 +10,26 @@
 
 @interface BlurViewController ()
 
+
+@property(nonatomic, strong)UIImageView *imageView;
 @end
 
 @implementation BlurViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 92, 414, 551)];
+    self.imageView.image = [UIImage imageNamed:@"MjAndMe"];
+    [self.view addSubview:self.imageView];
 }
 
+
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    self.imageView.image = [self blurImage:[UIImage imageNamed:@"MjAndMe"]];
+}
 /** 给一张照片,生成一张毛玻璃效果的图片*/
 -(UIImage *)blurImage:(UIImage *)image{
     
@@ -31,7 +42,7 @@
     //2.创建毛玻璃滤镜
     GPUImageGaussianBlurFilter *blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
     //纹理大小
-    blurFilter.texelSpacingMultiplier = 2.0;
+    blurFilter.texelSpacingMultiplier = 1.0; //控制卷的大小 取值 >=0, 默认是1
     blurFilter.blurRadiusInPixels = 5.0;
     
     // 添加滤镜
@@ -44,3 +55,22 @@
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

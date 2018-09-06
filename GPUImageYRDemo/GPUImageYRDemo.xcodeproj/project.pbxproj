@@ -17,6 +17,11 @@
 		2FF1E69E214093500009CF41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FF1E69C214093500009CF41 /* LaunchScreen.storyboard */; };
 		2FF1E6A1214093500009CF41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF1E6A0214093500009CF41 /* main.m */; };
 		2FF1E6AA214094460009CF41 /* GPUImageDemoListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF1E6A9214094460009CF41 /* GPUImageDemoListController.m */; };
+		2FFCF9A12141721700817266 /* GPUImageFilterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFCF9A02141721700817266 /* GPUImageFilterController.m */; };
+		2FFCF9A921417A0300817266 /* BeautifulCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFCF9A821417A0300817266 /* BeautifulCameraController.m */; };
+		2FFCF9AB21417DA600817266 /* BeautifulCameraController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FFCF9AA21417DA600817266 /* BeautifulCameraController.xib */; };
+		2FFCF9B0214183D300817266 /* GPUImageVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFCF9AF214183D300817266 /* GPUImageVideoController.m */; };
+		2FFCF9B4214183FB00817266 /* GPUImageVideoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FFCF9B3214183FB00817266 /* GPUImageVideoController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +42,14 @@
 		2FF1E6A0214093500009CF41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2FF1E6A8214094460009CF41 /* GPUImageDemoListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPUImageDemoListController.h; sourceTree = "<group>"; };
 		2FF1E6A9214094460009CF41 /* GPUImageDemoListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUImageDemoListController.m; sourceTree = "<group>"; };
+		2FFCF99F2141721700817266 /* GPUImageFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPUImageFilterController.h; sourceTree = "<group>"; };
+		2FFCF9A02141721700817266 /* GPUImageFilterController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUImageFilterController.m; sourceTree = "<group>"; };
+		2FFCF9A721417A0300817266 /* BeautifulCameraController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeautifulCameraController.h; sourceTree = "<group>"; };
+		2FFCF9A821417A0300817266 /* BeautifulCameraController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeautifulCameraController.m; sourceTree = "<group>"; };
+		2FFCF9AA21417DA600817266 /* BeautifulCameraController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BeautifulCameraController.xib; sourceTree = "<group>"; };
+		2FFCF9AE214183D300817266 /* GPUImageVideoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPUImageVideoController.h; sourceTree = "<group>"; };
+		2FFCF9AF214183D300817266 /* GPUImageVideoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUImageVideoController.m; sourceTree = "<group>"; };
+		2FFCF9B3214183FB00817266 /* GPUImageVideoController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GPUImageVideoController.xib; sourceTree = "<group>"; };
 		648812A652EBDB8C07579B1D /* Pods-GPUImageYRDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPUImageYRDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GPUImageYRDemo/Pods-GPUImageYRDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		DB43E14E5BE56F9A1F8C2CA8 /* Pods_GPUImageYRDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GPUImageYRDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -97,16 +110,56 @@
 		2FF1E6A7214094220009CF41 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				2FF1E6A8214094460009CF41 /* GPUImageDemoListController.h */,
-				2FF1E6A9214094460009CF41 /* GPUImageDemoListController.m */,
 				2FA4902D2140A25D00D7D3AE /* GPUViewController.h */,
 				2FA4902E2140A25D00D7D3AE /* GPUViewController.m */,
-				2FA49027214097C800D7D3AE /* BlurViewController.h */,
-				2FA49028214097C800D7D3AE /* BlurViewController.m */,
+				2FF1E6A8214094460009CF41 /* GPUImageDemoListController.h */,
+				2FF1E6A9214094460009CF41 /* GPUImageDemoListController.m */,
+				2FFCF9AD2141838100817266 /* 实时画面-直播 */,
+				2FFCF9A6214179CB00817266 /* 美颜相机 */,
+				2FFCF9A32141722A00817266 /* 其它滤镜效果 */,
+				2FFCF9A22141721E00817266 /* 毛玻璃 */,
 				2FA4902A2140A15B00D7D3AE /* GPUDemoCell.h */,
 				2FA4902B2140A15B00D7D3AE /* GPUDemoCell.m */,
 			);
 			path = Demo;
+			sourceTree = "<group>";
+		};
+		2FFCF9A22141721E00817266 /* 毛玻璃 */ = {
+			isa = PBXGroup;
+			children = (
+				2FA49027214097C800D7D3AE /* BlurViewController.h */,
+				2FA49028214097C800D7D3AE /* BlurViewController.m */,
+			);
+			path = "毛玻璃";
+			sourceTree = "<group>";
+		};
+		2FFCF9A32141722A00817266 /* 其它滤镜效果 */ = {
+			isa = PBXGroup;
+			children = (
+				2FFCF99F2141721700817266 /* GPUImageFilterController.h */,
+				2FFCF9A02141721700817266 /* GPUImageFilterController.m */,
+			);
+			path = "其它滤镜效果";
+			sourceTree = "<group>";
+		};
+		2FFCF9A6214179CB00817266 /* 美颜相机 */ = {
+			isa = PBXGroup;
+			children = (
+				2FFCF9A721417A0300817266 /* BeautifulCameraController.h */,
+				2FFCF9A821417A0300817266 /* BeautifulCameraController.m */,
+				2FFCF9AA21417DA600817266 /* BeautifulCameraController.xib */,
+			);
+			path = "美颜相机";
+			sourceTree = "<group>";
+		};
+		2FFCF9AD2141838100817266 /* 实时画面-直播 */ = {
+			isa = PBXGroup;
+			children = (
+				2FFCF9AE214183D300817266 /* GPUImageVideoController.h */,
+				2FFCF9AF214183D300817266 /* GPUImageVideoController.m */,
+				2FFCF9B3214183FB00817266 /* GPUImageVideoController.xib */,
+			);
+			path = "实时画面-直播";
 			sourceTree = "<group>";
 		};
 		EE1DC708351F72E4935184A2 /* Pods */ = {
@@ -179,9 +232,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FFCF9AB21417DA600817266 /* BeautifulCameraController.xib in Resources */,
 				2FF1E69E214093500009CF41 /* LaunchScreen.storyboard in Resources */,
 				2FF1E69B214093500009CF41 /* Assets.xcassets in Resources */,
 				2FF1E699214093500009CF41 /* Main.storyboard in Resources */,
+				2FFCF9B4214183FB00817266 /* GPUImageVideoController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,10 +302,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FF1E6A1214093500009CF41 /* main.m in Sources */,
+				2FFCF9A12141721700817266 /* GPUImageFilterController.m in Sources */,
 				2FF1E6AA214094460009CF41 /* GPUImageDemoListController.m in Sources */,
 				2FF1E693214093500009CF41 /* AppDelegate.m in Sources */,
+				2FFCF9A921417A0300817266 /* BeautifulCameraController.m in Sources */,
 				2FA4902C2140A15B00D7D3AE /* GPUDemoCell.m in Sources */,
 				2FA49029214097C800D7D3AE /* BlurViewController.m in Sources */,
+				2FFCF9B0214183D300817266 /* GPUImageVideoController.m in Sources */,
 				2FA4902F2140A25D00D7D3AE /* GPUViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,9 +445,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AP2R8WPL7H;
 				INFOPLIST_FILE = GPUImageYRDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = yr.GPUImageYRDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = yr.live;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -401,9 +461,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AP2R8WPL7H;
 				INFOPLIST_FILE = GPUImageYRDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = yr.GPUImageYRDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = yr.live;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

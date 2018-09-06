@@ -21,8 +21,14 @@
 -(NSArray<NSDictionary *> *)demoArr{
     if (!_demoArr) {
         //GPUImagePicture 图片
-        NSArray *pictureArr = @[ @{@"name":@"毛玻璃效果",@"filter":@"GPUImageGaussianBlurFilter",@"class":@"BlurViewController" }
+        NSArray *pictureArr = @[ @{@"name":@"毛玻璃效果",@"技术":@"GPUImageGaussianBlurFilter",@"class":@"BlurViewController" },
+                                 @{@"name":@"其它滤镜效果",@"技术":@"其它",@"class":@"GPUImageFilterController" },
+                                 @{@"name":@"美颜相机(美白 曝光)",@"技术":@"GPUImageStillCamera",@"class":@"BeautifulCameraController" },
+                                 @{@"name":@"实时画面-直播",@"技术":@"GPUImageVideoCamera",@"class":@"GPUImageVideoController" },
+                                 
                                 ];
+        
+        
         
 //        //GPUImageStillCamera 摄像头--照片拍照
 //        NSArray *stillCameraArr = @[];
@@ -73,7 +79,7 @@
     NSDictionary *demoDic =  self.demoArr[indexPath.section];
     NSDictionary *dic = ((NSArray *)demoDic[@"demos"])[indexPath.row];
     cell.textLabel.text = dic[@"name"];
-    cell.detailTextLabel.text = dic[@"filter"];
+    cell.detailTextLabel.text = dic[@"技术"];
     return cell;
 }
 
