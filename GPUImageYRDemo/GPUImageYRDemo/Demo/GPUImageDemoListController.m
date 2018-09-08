@@ -24,7 +24,8 @@
         NSArray *pictureArr = @[ @{@"name":@"毛玻璃效果",@"技术":@"GPUImageGaussianBlurFilter",@"class":@"BlurViewController" },
                                  @{@"name":@"其它滤镜效果",@"技术":@"其它",@"class":@"GPUImageFilterController" },
                                  @{@"name":@"美颜相机(美白 曝光)",@"技术":@"GPUImageStillCamera",@"class":@"BeautifulCameraController" },
-                                 @{@"name":@"实时画面-直播",@"技术":@"GPUImageVideoCamera",@"class":@"GPUImageVideoController" },
+                                 @{@"name":@"实时画面-直播",@"技术":@"GPUImageVideoCamera",@"class":@"LiveBroadCastCameraController" }
+                                 
                                  
                                 ];
         

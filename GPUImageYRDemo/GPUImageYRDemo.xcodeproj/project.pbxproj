@@ -11,6 +11,8 @@
 		2FA49029214097C800D7D3AE /* BlurViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA49028214097C800D7D3AE /* BlurViewController.m */; };
 		2FA4902C2140A15B00D7D3AE /* GPUDemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4902B2140A15B00D7D3AE /* GPUDemoCell.m */; };
 		2FA4902F2140A25D00D7D3AE /* GPUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4902E2140A25D00D7D3AE /* GPUViewController.m */; };
+		2FE571252141E4CF00A4BA9A /* LiveBroadCastCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE571232141E4CF00A4BA9A /* LiveBroadCastCameraController.m */; };
+		2FE571262141E4CF00A4BA9A /* LiveBroadCastCameraController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FE571242141E4CF00A4BA9A /* LiveBroadCastCameraController.xib */; };
 		2FF1E693214093500009CF41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF1E692214093500009CF41 /* AppDelegate.m */; };
 		2FF1E699214093500009CF41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FF1E697214093500009CF41 /* Main.storyboard */; };
 		2FF1E69B214093500009CF41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FF1E69A214093500009CF41 /* Assets.xcassets */; };
@@ -32,6 +34,9 @@
 		2FA4902B2140A15B00D7D3AE /* GPUDemoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUDemoCell.m; sourceTree = "<group>"; };
 		2FA4902D2140A25D00D7D3AE /* GPUViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPUViewController.h; sourceTree = "<group>"; };
 		2FA4902E2140A25D00D7D3AE /* GPUViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUViewController.m; sourceTree = "<group>"; };
+		2FE571222141E4CF00A4BA9A /* LiveBroadCastCameraController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveBroadCastCameraController.h; sourceTree = "<group>"; };
+		2FE571232141E4CF00A4BA9A /* LiveBroadCastCameraController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveBroadCastCameraController.m; sourceTree = "<group>"; };
+		2FE571242141E4CF00A4BA9A /* LiveBroadCastCameraController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiveBroadCastCameraController.xib; sourceTree = "<group>"; };
 		2FF1E68E214093500009CF41 /* GPUImageYRDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUImageYRDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FF1E691214093500009CF41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2FF1E692214093500009CF41 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -74,6 +79,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2FE571212141E40500A4BA9A /* 仿斗鱼直播 */ = {
+			isa = PBXGroup;
+			children = (
+				2FE571222141E4CF00A4BA9A /* LiveBroadCastCameraController.h */,
+				2FE571232141E4CF00A4BA9A /* LiveBroadCastCameraController.m */,
+				2FE571242141E4CF00A4BA9A /* LiveBroadCastCameraController.xib */,
+			);
+			path = "仿斗鱼直播";
+			sourceTree = "<group>";
+		};
 		2FF1E685214093500009CF41 = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +129,7 @@
 				2FA4902E2140A25D00D7D3AE /* GPUViewController.m */,
 				2FF1E6A8214094460009CF41 /* GPUImageDemoListController.h */,
 				2FF1E6A9214094460009CF41 /* GPUImageDemoListController.m */,
+				2FE571212141E40500A4BA9A /* 仿斗鱼直播 */,
 				2FFCF9AD2141838100817266 /* 实时画面-直播 */,
 				2FFCF9A6214179CB00817266 /* 美颜相机 */,
 				2FFCF9A32141722A00817266 /* 其它滤镜效果 */,
@@ -232,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FE571262141E4CF00A4BA9A /* LiveBroadCastCameraController.xib in Resources */,
 				2FFCF9AB21417DA600817266 /* BeautifulCameraController.xib in Resources */,
 				2FF1E69E214093500009CF41 /* LaunchScreen.storyboard in Resources */,
 				2FF1E69B214093500009CF41 /* Assets.xcassets in Resources */,
@@ -303,6 +320,7 @@
 			files = (
 				2FF1E6A1214093500009CF41 /* main.m in Sources */,
 				2FFCF9A12141721700817266 /* GPUImageFilterController.m in Sources */,
+				2FE571252141E4CF00A4BA9A /* LiveBroadCastCameraController.m in Sources */,
 				2FF1E6AA214094460009CF41 /* GPUImageDemoListController.m in Sources */,
 				2FF1E693214093500009CF41 /* AppDelegate.m in Sources */,
 				2FFCF9A921417A0300817266 /* BeautifulCameraController.m in Sources */,
