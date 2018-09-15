@@ -43,20 +43,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self beautifulCamera];
+    [self brightnessFilter];
+    
     self.imageView.hidden = YES;
     self.imageView.userInteractionEnabled = YES;
 }
 
 -(void)start{
+    [self brightnessFilter];
     [self.beautifulCamera addTarget:self.brightnessFilter];
+    
     // 创建GPUImageView 用于显示实时的画面
     GPUImageView *preView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
-    [self.view insertSubview:preView aboveSubview:self.imageView];
+    
     [self.brightnessFilter addTarget:preView];
     self.preView = preView;
     
     // 开始捕捉画面
     [self.beautifulCamera startCameraCapture];
+    
+    [self.view insertSubview:preView aboveSubview:self.imageView];
 }
 
 -(void)cancle{

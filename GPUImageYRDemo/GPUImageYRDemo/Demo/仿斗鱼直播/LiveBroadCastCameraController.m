@@ -8,6 +8,7 @@
 
 #import "LiveBroadCastCameraController.h"
 #import <AVKit/AVKit.h> // 播放录制的视频
+// openGL
 
 @interface LiveBroadCastCameraController ()<GPUImageVideoCameraDelegate>
 
@@ -21,7 +22,7 @@
 #pragma mark- 各种滤镜
 /**磨皮滤镜(祛痘)*/
 @property(nonatomic, strong)GPUImageBilateralFilter *bilateralFilter;
-/**曝光滤镜*/
+/**曝光滤镜 - 增加屏幕亮度,一亮屏幕喝多东西看不见了*/
 @property(nonatomic, strong)GPUImageExposureFilter *exposureFilter;
 /**美白滤镜*/
 @property(nonatomic, strong)GPUImageBrightnessFilter *brightnessFilter;
@@ -45,7 +46,7 @@
 
 - (GPUImageVideoCamera *)beatufulCamera{
     if (!_beatufulCamera) {
-        //sessionPreset 会影响画质,和显示区域的大小
+        //sessionPreset 指定分辨率,会影响画质和显示区域的大小
         _beatufulCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPresetHigh cameraPosition:AVCaptureDevicePositionFront];
         // 默认相机方向
         _beatufulCamera.outputImageOrientation =  UIInterfaceOrientationPortrait;
@@ -101,7 +102,7 @@
         [self.exposureFilter addTarget:self.saturationFilter];
         
         // 设置滤镜组的 链初始 和 链终点的filter
-        _filterGroup.initialFilters = @[self.bilateralFilter];
+        _filterGroup.initialFilters = @[self.bilateralFilter]; // 第一行?
         _filterGroup.terminalFilter = self.saturationFilter;
     }
     return _filterGroup;
@@ -121,7 +122,7 @@
         NSURL *fileURl = [NSURL fileURLWithPath:movieFilePath];
         
         _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:fileURl size:[UIScreen mainScreen].bounds.size];
-//        // 设置writer 的属性, 是否对视频进行编码
+//        // 设置writer 的属性, 是否对视频进行编码, 视频如果不编码的化很大
         [_movieWriter setEncodingLiveVideo:YES];
     }
     return _movieWriter;
@@ -187,6 +188,13 @@
 - (IBAction)rotateBtnClick:(id)sender {
     // 切换镜头
     [self.beatufulCamera rotateCamera];
+    [self.beatufulCamera pauseCameraCapture];
+    
+//    开始 结束 暂停 恢复
+//    - (void)startCameraCapture;
+//    - (void)stopCameraCapture;
+//    - (void)pauseCameraCapture;
+//    - (void)resumeCameraCapture;
 }
 
 - (IBAction)beautifulSwitcherChangeValue:(UISwitch *)switcher {
@@ -256,7 +264,9 @@
 
 
 #pragma mark- GPUImageVideoCameraDelegate
-/** 改代理方法会不停的调用,只要有数据数据就会调用*/
+/** (1)改代理方法会不停的调用,只要有数据数据就会调用
+    (2)此处输出的sampleBuffer 已经是GPUImage处理过的sampleBuffer了
+ */
 - (void)willOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer{
     NSLog(@"========美颜相机开始采集画面=========");
 }
