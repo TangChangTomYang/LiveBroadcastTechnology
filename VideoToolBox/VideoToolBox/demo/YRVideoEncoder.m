@@ -45,16 +45,18 @@
     //2.
     self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:file];
     
-    
-    
-    
- 
-    
 }
 
 
 
-
+/**
+ 编码前期一般我们会设置以下几个参数
+ (0) 设置要不要实时输出
+ (1) 设置期望帧率(每秒多少个画面)
+ (2) 设置码率
+ (3) 设置最大GOP 数量
+ (4) 准备编码
+ */
 -(void)setupVideoSession{
     
     //1. 用于记录当前是第几帧数据(画面的帧数非常的多)
@@ -94,11 +96,12 @@
     NSArray *limit = @[@(bitRate * 1.5/8),@(1)];
     VTSessionSetProperty(self.compressSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)limit);
     
-    //7.设置关键帧(GOPsize)间隔
+    //7.设置关键帧间隔(GOP Size,即一个GOP最大多少帧)
+    // 一般我们这个GOP 最大的帧数我们就设置为我们一秒最大的帧数,这样如果画面出现错误,在下一秒就会有另一个I帧恢复画面
     int frameInterval = 30;
-    
     CFNumberRef frameIntervalRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &frameInterval);
     VTSessionSetProperty(self.compressSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, frameIntervalRef);
+    
     // 8.基本设置结束, 准备进行编码
     VTCompressionSessionPrepareToEncodeFrames(self.compressSession);
     
@@ -218,7 +221,6 @@ void didCompressH2264(void *outputCallbackRefCon,
         [self.fileHandle writeData:byteHeader];
         [self.fileHandle writeData:encodedData];
     }
-    
 }
 
 
@@ -245,19 +247,14 @@ void didCompressH2264(void *outputCallbackRefCon,
     if (statusCode == noErr) {
         NSLog(@"H264: VTCompressionSessionEncodeFrame Success");
     }
-    
 }
 
 
 -(void)endEncode{
-   
     VTCompressionSessionCompleteFrames(self.compressSession, kCMTimeInvalid);
     VTCompressionSessionInvalidate(self.compressSession);
     CFRelease(self.compressSession);
     self.compressSession  = NULL;
-    
-    
-    
 }
 
 
