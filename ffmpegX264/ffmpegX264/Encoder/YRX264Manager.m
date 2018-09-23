@@ -6,6 +6,14 @@
 //  Copyright © 2018年 yangrui. All rights reserved.
 //
 
+/** AVFrame 结构体说明
+ AVFrame 结构体一般用于存储原始数据(即非压缩数据,例如: 对于视频来说是YUV \RGB,对于音频来说是PCM),此外还包含一些相关的信息,
+ 比如说: 解码的时候存储的宏块类型表\QP表\运动矢量表等数据.编码的时候也存储了相关的数据,因此在使用ffmpeg 进行码流分析的时候AVFRame是一个很
+ 重要的数据
+ */
+
+
+
 #import "YRX264Manager.h"
 
 #ifdef __cplusplus
@@ -22,21 +30,37 @@ extern "C" {
 #endif
 
 
-/*
- 编码之后&解码之前的画面: AVFrame --> 内容写入文件
- 编码之前&解码之后的画面: AVPackage --> 解码之后, 使用OpenGLES渲染
+/*ffmpeg 关键结构体关系说明
+ 1. 解协议(https、rtsp、rtmp、mms) ,涉及有AVIOContext、URLProtocal、URLContext
+ 2. 解封装(flv、avi、rmvb、MP4) ,涉及有AVFormatCntext、AVInputFormat
+ 3. 解码(h264、mpeg2、acc、MP3) ,涉及有AVStream、AVCodecContext、AVCodec
+ 4. 数据存储 , 涉及有 AVPacket(解码前数据)、AVFrame(解码后数据)
  */
 
 @implementation YRX264Manager
 {
+    /**AVFormatContext是一个贯穿始终的数据结构，很多函数都要用到它作为参数。
+     主要有: 输入数据的封装格式(AVInputFormat),输入数据的缓存,视音频流及视音频流个数,文件名,比特率,元数据等等
+     它是FFMPEG解封装（flv，mp4，rmvb，avi）功能的结构体*/
     AVFormatContext                     *pFormatCtx;
+    
     AVOutputFormat                      *fmt;
+   
+    
+    /**AVStream是存储每一个视频/音频流信息的结构体,每个AVStream对应一个AVCcodecContext*/
     AVStream                            *video_st;
+    /**每个 AVCodecContext中对应一个AVCodec, 主要有,编解码器的类型(视频,音频), 视频的宽度高度等信息*/
     AVCodecContext                      *pCodecCtx;
+    /** AVCodec 是存储编解码器信息的结构体,比如编码器的ID,名字,类型,帧率,像素格式,(采样率,采样格式等等) */
     AVCodec                             *pCodec;
+    
+    
+    /** AVPacket 是存储压缩编码数据相关信息的结构体, 比如: 压缩编码的NAL,时间戳等*/
     AVPacket                             pkt;
-    uint8_t                             *picture_buf;
+    /**AVFrame结构体一般用于存储原始数据（即非压缩数据，例如对视频来说是YUV，RGB，对音频来说是PCM）*/
     AVFrame                             *pFrame;
+    
+    uint8_t                             *picture_buf;
     int                                  picture_size;
     int                                  y_size;
     int                                  framecnt;
@@ -53,6 +77,8 @@ extern "C" {
  */
 - (void)setFileSavedPath:(NSString *)path;
 {
+  
+    pFormatCtx->duration;
     out_file = [self nsstring2char:path];
 }
 
@@ -84,6 +110,7 @@ extern "C" {
     encoder_h264_frame_height = height;
     
     // 3.注册FFmpeg所有编解码器(无论编码还是解码都需要该步骤)
+    // 你看见的凡是av 开头的基本都是ffmpeg 里面的方法
     av_register_all();
     
     // 4.初始化AVFormatContext: 用作之后写入视频帧并编码成 h264，贯穿整个工程当中(释放资源时需要销毁)

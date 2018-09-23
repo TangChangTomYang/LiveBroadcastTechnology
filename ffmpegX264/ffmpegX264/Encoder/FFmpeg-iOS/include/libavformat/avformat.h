@@ -611,6 +611,9 @@ typedef struct AVOutputFormat {
 /**
  * @addtogroup lavf_decoding
  * @{
+ *
+ * 输入数据的封装格式
+ *
  */
 typedef struct AVInputFormat {
     /**
@@ -832,6 +835,10 @@ typedef struct AVIndexEntry {
  * sizeof(AVStream) must not be used outside libav*.
  */
 typedef struct AVStream {
+    
+    /**
+     * 标识该视频\音频流
+     */
     int index;    /**< stream index in AVFormatContext */
     /**
      * Format-specific stream ID.
@@ -839,16 +846,10 @@ typedef struct AVStream {
      * encoding: set by the user, replaced by libavformat if left unset
      */
     int id;
+    
+    
     /**
-     * Codec context associated with this stream. Allocated and freed by
-     * libavformat.
-     *
-     * - decoding: The demuxer exports codec information stored in the headers
-     *             here.
-     * - encoding: The user sets codec information, the muxer writes it to the
-     *             output. Mandatory fields as specified in AVCodecContext
-     *             documentation must be set even if this AVCodecContext is
-     *             not actually used for encoding.
+     * 指向该视频\音频的AVCodecContext (它们是一一对应的关系)
      */
     AVCodecContext *codec;
     void *priv_data;
@@ -862,16 +863,8 @@ typedef struct AVStream {
 #endif
 
     /**
-     * This is the fundamental unit of time (in seconds) in terms
-     * of which frame timestamps are represented.
-     *
-     * decoding: set by libavformat
-     * encoding: May be set by the caller before avformat_write_header() to
-     *           provide a hint to the muxer about the desired timebase. In
-     *           avformat_write_header(), the muxer will overwrite this field
-     *           with the timebase that will actually be used for the timestamps
-     *           written into the file (which may or may not be related to the
-     *           user-provided one, depending on the format).
+     * 时基,通过该值可以把pts ,dts 转化为正真的时间,ffmpeg 其它结构体中也有这个字段,但是根据我的经验,只有AVStream的timeBase 是可用的
+     * pts * timeBase = 真正的时间
      */
     AVRational time_base;
 
@@ -886,9 +879,8 @@ typedef struct AVStream {
     int64_t start_time;
 
     /**
-     * Decoding: duration of the stream, in stream time base.
-     * If a source file does not specify a duration, but does specify
-     * a bitrate, this value will be estimated from bitrate and file size.
+     * 该视频\音频流长度(单位:微妙us,转换为秒需要除以10000000)
+     * 
      */
     int64_t duration;
 
@@ -905,23 +897,19 @@ typedef struct AVStream {
      */
     AVRational sample_aspect_ratio;
 
+    /**
+     *
+     *元数据信息
+     */
     AVDictionary *metadata;
 
     /**
-     * Average framerate
-     *
-     * - demuxing: May be set by libavformat when creating the stream or in
-     *             avformat_find_stream_info().
-     * - muxing: May be set by the caller before avformat_write_header().
+     * 帧率 (注: 对视频来说,这个很重要)
      */
     AVRational avg_frame_rate;
 
     /**
-     * For streams with AV_DISPOSITION_ATTACHED_PIC disposition, this packet
-     * will contain the attached picture.
-     *
-     * decoding: set by libavformat, must not be modified by the caller.
-     * encoding: unused
+     * 附带的图片,比如说一些MP3,AAC音频文件附带的专辑封面.
      */
     AVPacket attached_pic;
 
@@ -1268,16 +1256,12 @@ typedef struct AVFormatContext {
     const AVClass *av_class;
 
     /**
-     * The input container format.
-     *
-     * Demuxing only, set by avformat_open_input().
+     * 输入数据的分装格式
      */
     struct AVInputFormat *iformat;
 
     /**
-     * The output container format.
-     *
-     * Muxing only, must be set by the caller before avformat_write_header().
+     * 输出数据的封装格式
      */
     struct AVOutputFormat *oformat;
 
@@ -1291,16 +1275,7 @@ typedef struct AVFormatContext {
     void *priv_data;
 
     /**
-     * I/O context.
-     *
-     * - demuxing: either set by the user before avformat_open_input() (then
-     *             the user must close it manually) or set by avformat_open_input().
-     * - muxing: set by the user before avformat_write_header(). The caller must
-     *           take care of closing / freeing the IO context.
-     *
-     * Do NOT set this field if AVFMT_NOFILE flag is set in
-     * iformat/oformat.flags. In such a case, the (de)muxer will handle
-     * I/O in some other way and this field will be NULL.
+     * 输入数据的缓存
      */
     AVIOContext *pb;
 
@@ -1312,29 +1287,20 @@ typedef struct AVFormatContext {
     int ctx_flags;
 
     /**
-     * Number of elements in AVFormatContext.streams.
+     * 视音频流的个数
      *
-     * Set by avformat_new_stream(), must not be modified by any other code.
      */
     unsigned int nb_streams;
+    
     /**
-     * A list of all streams in the file. New streams are created with
-     * avformat_new_stream().
+     * 视音频流
      *
-     * - demuxing: streams are created by libavformat in avformat_open_input().
-     *             If AVFMTCTX_NOHEADER is set in ctx_flags, then new streams may also
-     *             appear in av_read_frame().
-     * - muxing: streams are created by the user before avformat_write_header().
-     *
-     * Freed by libavformat in avformat_free_context().
      */
     AVStream **streams;
 
     /**
-     * input or output filename
+     * 文件名
      *
-     * - demuxing: set by avformat_open_input()
-     * - muxing: may be set by the caller before avformat_write_header()
      */
     char filename[1024];
 
@@ -1348,19 +1314,19 @@ typedef struct AVFormatContext {
     int64_t start_time;
 
     /**
-     * Duration of the stream, in AV_TIME_BASE fractional
-     * seconds. Only set this value if you know none of the individual stream
-     * durations and also do not set any of them. This is deduced from the
-     * AVStream values if not set.
-     *
-     * Demuxing only, set by libavformat.
+     * 时长(单位微妙us,转换为秒需要除以10000000)
      */
     int64_t duration;
 
     /**
-     * Total stream bitrate in bit/s, 0 if not
-     * available. Never set it directly if the file_size and the
-     * duration are known as FFmpeg can compute it automatically.
+     * 比特率(单位bps, 转换为kbps 需要除以1000)
+     *
+     int tns, thh, tmm, tss;
+     tns  = (pFormatCtx->duration)/1000000;
+     thh  = tns / 3600;
+     tmm  = (tns % 3600) / 60;
+     tss  = (tns % 60);
+     [NSString stringWithFormat:@"%02d:%02d:%02d",thh,tmm,tss];
      */
     int bit_rate;
 
@@ -1463,12 +1429,27 @@ typedef struct AVFormatContext {
     AVChapter **chapters;
 
     /**
-     * Metadata that applies to the whole file.
+     * 元数据
+     * 说明:
+     * 视频的原数据（metadata）信息可以通过AVDictionary获取。元数据存储在AVDictionaryEntry结构体中，如下所示
+     typedef struct AVDictionaryEntry {
+         char *key;
+         char *value;
+     } AVDictionaryEntry;
+     每一条元数据分为key和value两个属性。
+     在ffmpeg中通过av_dict_get()函数获得视频的原数据。
+     下列代码显示了获取元数据并存入meta字符串变量的过程，注意每一条key和value之间有一个"\t:"，value之后有一个"\r\n"
      *
-     * - demuxing: set by libavformat in avformat_open_input()
-     * - muxing: may be set by the caller before avformat_write_header()
-     *
-     * Freed by libavformat in avformat_free_context().
+     从AVDictionary获得,需要用到AVDictionaryEntry对象
+     CString meta=NULL,key,value;
+     AVDictionaryEntry *m = NULL;
+    不用一个一个找出来, 使用循环读出
+    (需要读取的数据，字段名称，前一条字段（循环时使用），参数)
+    while(m=av_dict_get(pFormatCtx->metadata,"",m,AV_DICT_IGNORE_SUFFIX)){
+        key.Format(m->key);
+        value.Format(m->value);
+        meta+=key+"\t:"+value+"\r\n" ;
+    }
      */
     AVDictionary *metadata;
 

@@ -38,7 +38,7 @@
  */
 
 /**
- * rational number numerator/denominator
+ * 宽高比是一个分数, ffmpeg 中用AVRAtional 表达分数
  */
 typedef struct AVRational{
     int num; ///< numerator

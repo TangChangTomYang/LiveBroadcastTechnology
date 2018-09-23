@@ -97,16 +97,7 @@ typedef struct AVIODirContext {
 } AVIODirContext;
 
 /**
- * Bytestream IO Context.
- * New fields can be added to the end with minor version bumps.
- * Removal, reordering and changes to existing fields require a major
- * version bump.
- * sizeof(AVIOContext) must not be used outside libav*.
- *
- * @note None of the function pointers in AVIOContext should be called
- *       directly, they should only be set by the client application
- *       when implementing custom I/O. Normally these are set to the
- *       function pointers specified in avio_alloc_context()
+ * AVIOContext是FFMPEG管理输入输出数据的结构体
  */
 typedef struct AVIOContext {
     /**
@@ -122,13 +113,67 @@ typedef struct AVIOContext {
      * to any av_opt_* functions in that case.
      */
     const AVClass *av_class;
+    
+    /**
+     * 缓存开始位置
+     */
     unsigned char *buffer;  /**< Start of the buffer. */
+    
+    /**
+     * 缓存大小(默认32768)
+     */
     int buffer_size;        /**< Maximum buffer size */
+    
+    /**
+     * 当前指针读取到的位置
+     */
     unsigned char *buf_ptr; /**< Current position in the buffer */
+    
+    /**
+     * 缓存结束的位置
+     */
     unsigned char *buf_end; /**< End of the data, may be less than
                                  buffer+buffer_size if the read function returned
                                  less data than requested, e.g. for streams where
                                  no more data has been received yet. */
+    
+    /**
+     * URLContext 结构体
+     * 在解码的情况下,buffer用于存储ffmpeg读入的数据,例如打开一个视频文件的时候,先把数据从硬盘读入到buffer,然后在
+     * 送给解码器用于解码
+     * opaque 这个结构体并不在ffempeg 提供的头文件中,而是在ffmpeg的源代码中,具体定义如下:
+        typedef struct URLContext {
+            const AVClass *av_class;
+            struct URLProtocol *prot;
+            int flags;
+            int is_streamed;
+            int max_packet_size;
+            void *priv_data;
+            char *filename;  int is_connected;
+            AVIOInterruptCB interrupt_callback;
+        } URLContext;
+     URLContext 结构体中还有一个URLProtocol ,注意: 每种协议(rtp,rtmp,file等) 对应一个URLProtocol
+     这个结构体也没在ffmpeg 的头文件中,从ffmpeg 查看如下:
+     typedef struct URLProtocol {
+         const char *name;
+         int (*url_open)(URLContext *h, const char *url, int flags);
+         int (*url_read)(URLContext *h, unsigned char *buf, int size);
+         int (*url_write)(URLContext *h, const unsigned char *buf, int size);
+         int64_t (*url_seek)(URLContext *h, int64_t pos, int whence);
+         int (*url_close)(URLContext *h);
+         struct URLProtocol *next;
+         int (*url_read_pause)(URLContext *h, int pause);
+         int64_t (*url_read_seek)(URLContext *h, int stream_index,
+         int64_t timestamp, int flags);
+         int (*url_get_file_handle)(URLContext *h);
+         int priv_data_size;
+         const AVClass *priv_data_class;
+         int flags;
+         int (*url_check)(URLContext *h, int mask);
+     } URLProtocol;
+     
+
+     */
     void *opaque;           /**< A private pointer, passed to the read/write/seek/...
                                  functions. */
     int (*read_packet)(void *opaque, uint8_t *buf, int buf_size);

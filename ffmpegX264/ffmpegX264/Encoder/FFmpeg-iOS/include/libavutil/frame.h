@@ -139,62 +139,67 @@ typedef struct AVFrameSideData {
     AVBufferRef *buf;
 } AVFrameSideData;
 
-/**
- * This structure describes decoded (raw) audio or video data.
- *
- * AVFrame must be allocated using av_frame_alloc(). Note that this only
- * allocates the AVFrame itself, the buffers for the data must be managed
- * through other means (see below).
- * AVFrame must be freed with av_frame_free().
- *
- * AVFrame is typically allocated once and then reused multiple times to hold
- * different data (e.g. a single AVFrame to hold frames received from a
- * decoder). In such a case, av_frame_unref() will free any references held by
- * the frame and reset it to its original clean state before it
- * is reused again.
- *
- * The data described by an AVFrame is usually reference counted through the
- * AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
- * AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
- * least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
- * every single data plane must be contained in one of the buffers in
- * AVFrame.buf or AVFrame.extended_buf.
- * There may be a single buffer for all the data, or one separate buffer for
- * each plane, or anything in between.
- *
- * sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
- * to the end with a minor bump.
- * Similarly fields that are marked as to be only accessed by
- * av_opt_ptr() can be reordered. This allows 2 forks to add fields
- * without breaking compatibility with each other.
+
+// * This structure describes decoded (raw) audio or video data.
+// *
+// * AVFrame must be allocated using av_frame_alloc(). Note that this only
+// * allocates the AVFrame itself, the buffers for the data must be managed
+// * through other means (see below).
+// * AVFrame must be freed with av_frame_free().
+// *
+// * AVFrame is typically allocated once and then reused multiple times to hold
+// * different data (e.g. a single AVFrame to hold frames received from a
+// * decoder). In such a case, av_frame_unref() will free any references held by
+// * the frame and reset it to its original clean state before it
+// * is reused again.
+// *
+// * The data described by an AVFrame is usually reference counted through the
+// * AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
+// * AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
+// * least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
+// * every single data plane must be contained in one of the buffers in
+// * AVFrame.buf or AVFrame.extended_buf.
+// * There may be a single buffer for all the data, or one separate buffer for
+// * each plane, or anything in between.
+// *
+// * sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
+// * to the end with a minor bump.
+// * Similarly fields that are marked as to be only accessed by
+// * av_opt_ptr() can be reordered. This allows 2 forks to add fields
+// * without breaking compatibility with each other.
+/*
+ * AVFrame 结构体一般用于存储原始数据(即非压缩数据,例如: 对于视频来说是YUV \RGB,对于音频来说是PCM),此外还包含一些相关的信息,
+ * 比如说: 解码的时候存储的宏块类型表\QP表\运动矢量表等数据.编码的时候也存储了相关的数据,因此在使用ffmpeg 进行码流分析的时候AVFRame是一个很
+ * 重要的数据
  */
 typedef struct AVFrame {
 #define AV_NUM_DATA_POINTERS 8
+ 
     /**
-     * pointer to the picture/channel planes.
-     * This might be different from the first allocated byte
-     *
-     * Some decoders access areas outside 0,0 - width,height, please
-     * see avcodec_align_dimensions2(). Some filters and swscale can read
-     * up to 16 bytes beyond the planes, if these filters are to be used,
-     * then 16 extra bytes must be allocated.
+     * 解码后的原始数据 (对于视频是 YUV\RGB ,对于音频来说是 PCM)
+     * 具体说明如下:
+     * 对于paked 格式的数据(例如 RGB24),会存储到data[0]里面
+     * 对于planar格式的数据(例如YUV420P),则会分开成data[0],data[1],data[2]... (YUV420P 中的data[0]存Y,data[1] 存U, data[2]存V)
      */
     uint8_t *data[AV_NUM_DATA_POINTERS];
 
+   
+//     * For video, size in bytes of each picture line.
+//     * For audio, size in bytes of each plane.
+//     *
+//     * For audio, only linesize[0] may be set. For planar audio, each channel
+//     * plane must be the same size.
+//     *
+//     * For video the linesizes should be multiples of the CPUs alignment
+//     * preference, this is 16 or 32 for modern desktop CPUs.
+//     * Some code requires such alignment other code can be slower without
+//     * correct alignment, for yet other it makes no difference.
+//     *
+//     * @note The linesize may be larger than the size of usable data -- there
+//     * may be extra padding present for performance reasons.
+//     *
     /**
-     * For video, size in bytes of each picture line.
-     * For audio, size in bytes of each plane.
-     *
-     * For audio, only linesize[0] may be set. For planar audio, each channel
-     * plane must be the same size.
-     *
-     * For video the linesizes should be multiples of the CPUs alignment
-     * preference, this is 16 or 32 for modern desktop CPUs.
-     * Some code requires such alignment other code can be slower without
-     * correct alignment, for yet other it makes no difference.
-     *
-     * @note The linesize may be larger than the size of usable data -- there
-     * may be extra padding present for performance reasons.
+     * data 中一行数据的大小,注意:未必等于图像的宽度,一般大于图像的宽度
      */
     int linesize[AV_NUM_DATA_POINTERS];
 
@@ -214,30 +219,42 @@ typedef struct AVFrame {
      */
     uint8_t **extended_data;
 
+
+//     * width and height of the video frame
     /**
-     * width and height of the video frame
+     * 视频帧的宽和高(1920 * 1080,1280 *720 ...)
      */
     int width, height;
 
+    
+//     * number of audio samples (per channel) described by this frame
     /**
-     * number of audio samples (per channel) described by this frame
+     * 音频的一个AVFrame中可能包含了多个音频帧,在此标记包含了几个
      */
     int nb_samples;
 
+
+//     * format of the frame, -1 if unknown or unset
+//     * Values correspond to enum AVPixelFormat for video frames,
+//     * enum AVSampleFormat for audio)
     /**
-     * format of the frame, -1 if unknown or unset
-     * Values correspond to enum AVPixelFormat for video frames,
-     * enum AVSampleFormat for audio)
+     * 解码后原始数据的类型(YUV420\YUV422\RGB24...)
+     *
      */
     int format;
 
+
+//     * 1 -> keyframe, 0-> not
     /**
-     * 1 -> keyframe, 0-> not
+     * 是否是关键帧 1 -> keyframe, 0-> not
+     *
      */
     int key_frame;
 
+    
+//     * Picture type of the frame.
     /**
-     * Picture type of the frame.
+     * 帧类型(I,B,P)
      */
     enum AVPictureType pict_type;
 
@@ -246,13 +263,19 @@ typedef struct AVFrame {
     uint8_t *base[AV_NUM_DATA_POINTERS];
 #endif
 
+   
+//     * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
     /**
-     * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
+     * 宽高比(16:9,4:3)
+     * 说明如下:
+     * 宽高比是一个分数, ffmpeg 中用AVRAtional 表达分数
      */
     AVRational sample_aspect_ratio;
 
+    
+//     * Presentation timestamp in time_base units (time when frame should be shown to user).
     /**
-     * Presentation timestamp in time_base units (time when frame should be shown to user).
+     * 显示时间戳
      */
     int64_t pts;
 
@@ -268,12 +291,16 @@ typedef struct AVFrame {
      */
     int64_t pkt_dts;
 
+    
+//     * picture number in bitstream order
     /**
-     * picture number in bitstream order
+     * 编码帧序号
      */
     int coded_picture_number;
+    
+//   * picture number in display order
     /**
-     * picture number in display order
+     * 显示帧序号
      */
     int display_picture_number;
 
@@ -286,8 +313,20 @@ typedef struct AVFrame {
     attribute_deprecated
     int reference;
 
+   
+//     * QP table
     /**
-     * QP table
+     * QP表
+     * 具体说明:
+     * QP 表指向一个内存,里面存储的是每个宏块的QP值,宏块的标号从左往右一行一行的来,每一个宏块对应一个QP
+     * qscale_table[0] 就是第一行一列的宏块QP值;
+     * qscale_table[1] 就是第一行二列的宏块QP值; 以此类推
+     * 注意: 宏块大小是 16*16 的
+     * 宏块个数计算:
+     * 每行宏块数:  int mb_stride = pCodecCtx->width/16+1
+     * 宏块的总数:  int mb_sum = ((pCodecCtx->height+15)>>4)*(pCodecCtx->width/16+1)
+     
+
      */
     attribute_deprecated
     int8_t *qscale_table;
@@ -300,10 +339,12 @@ typedef struct AVFrame {
     attribute_deprecated
     int qscale_type;
 
-    /**
-     * mbskip_table[mb]>=1 if MB didn't change
-     * stride= mb_width = (width+15)>>4
-     */
+    
+//     * mbskip_table[mb]>=1 if MB didn't change
+//     * stride= mb_width = (width+15)>>4
+     /**
+      * 跳过宏块表
+      */
     attribute_deprecated
     uint8_t *mbskip_table;
 
@@ -361,9 +402,11 @@ typedef struct AVFrame {
      */
     int repeat_pict;
 
-    /**
-     * The content of the picture is interlaced.
-     */
+   
+//     * The content of the picture is interlaced.
+      /**
+       *是够是隔行扫描
+       */
     int interlaced_frame;
 
     /**
@@ -409,10 +452,12 @@ typedef struct AVFrame {
     attribute_deprecated
     void *thread_opaque;
 
-    /**
-     * log2 of the size of the block which a single vector in motion_val represents:
-     * (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
-     */
+    
+//     * log2 of the size of the block which a single vector in motion_val represents:
+//     * (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
+     /**
+      * 一个宏块中的运动矢量采样个数取log的
+      */
     uint8_t motion_subsample_log2;
 #endif
 
