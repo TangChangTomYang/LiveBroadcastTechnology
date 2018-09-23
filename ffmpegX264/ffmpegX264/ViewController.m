@@ -7,8 +7,12 @@
 //
 
 #import "ViewController.h"
+#import "YRVideoCapture.h"
 
 @interface ViewController ()
+
+/** 视频捕捉对象 */
+@property (nonatomic, strong) YRVideoCapture *videoCapture;
 
 @end
 
@@ -16,14 +20,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)startCapture {
+    [self.videoCapture startCapture:self.view];
 }
 
+- (IBAction)stopCapture {
+    [self.videoCapture stopCapture];
+}
+
+- (YRVideoCapture *)videoCapture {
+    if (_videoCapture == nil) {
+        _videoCapture = [[YRVideoCapture alloc] init];
+    }
+    
+    return _videoCapture;
+}
 
 @end
+

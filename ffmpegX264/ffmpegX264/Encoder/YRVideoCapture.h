@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import <UIKit/UIKit.h>
+
 @interface YRVideoCapture : NSObject
 
+- (void)startCapture:(UIView *)preview;
 
--(void)startCapture:(UIView *)preView;
--(void)stopCapture;
+- (void)stopCapture;
+
 @end
