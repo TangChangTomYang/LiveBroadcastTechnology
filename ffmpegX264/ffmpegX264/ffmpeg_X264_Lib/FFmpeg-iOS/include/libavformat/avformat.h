@@ -850,6 +850,7 @@ typedef struct AVStream {
     
     /**
      * 指向该视频\音频的AVCodecContext (它们是一一对应的关系)
+     * 编解码器上下文(比如: H.264编解码器)
      */
     AVCodecContext *codec;
     void *priv_data;
@@ -1241,6 +1242,7 @@ enum AVDurationEstimationMethod {
 typedef struct AVFormatInternal AVFormatInternal;
 
 /**
+ * 输入输出封装格式上下文
  * Format I/O context.
  * New fields can be added to the end with minor version bumps.
  * Removal, reordering and changes to existing fields require a major
@@ -1256,12 +1258,14 @@ typedef struct AVFormatContext {
     const AVClass *av_class;
 
     /**
-     * 输入数据的分装格式
+     * 输入数据的分装格式, 与 AVOutputFormat对应
+     * 比如: FLV,AVI,MKV等
      */
     struct AVInputFormat *iformat;
 
     /**
-     * 输出数据的封装格式
+     * 输出数据的封装格式, 与 AVInputFormat对应
+     * 比如: FLV,AVI,MKV等
      */
     struct AVOutputFormat *oformat;
 
@@ -1275,7 +1279,7 @@ typedef struct AVFormatContext {
     void *priv_data;
 
     /**
-     * 输入数据的缓存
+     * 输入数据的缓存 AVIOContext
      */
     AVIOContext *pb;
 
@@ -1288,13 +1292,13 @@ typedef struct AVFormatContext {
 
     /**
      * 视音频流的个数
-     *
+     * 指的第AVStream 的个数
      */
     unsigned int nb_streams;
     
     /**
      * 视音频流
-     *
+     * 一个Stream 对应一个码流(H.264 码流)
      */
     AVStream **streams;
 
@@ -1315,6 +1319,7 @@ typedef struct AVFormatContext {
 
     /**
      * 时长(单位微妙us,转换为秒需要除以10000000)
+     * 这个时间就是视频,音频的播放时长
      */
     int64_t duration;
 

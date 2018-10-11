@@ -40,16 +40,14 @@
     // 2.开始编码
     [self.encoder setFileSavedPath:file];
     
-    // 特别特别注意: 宽度&高度
-    // 这个 宽度和高度直接决定软编码时数据的获取方式很重要
-    // 通过sessionPreset设置的值来确定尺寸大小
-    // 通过 AVCaptureConnection 的 videoOrientation value 来决定尺寸中的参数, 哪个代表宽哪个代表高
-    [self.encoder setX264ResourceWithVideoWidth:480 height:640 bitrate:1500000];
+   
     
     // 1.创建捕捉会话
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
-    // 注意这个尺寸仅仅是用来说明采集的视频的尺寸的宽高是那种, 比如 640x480 描述的只是一个尺寸,但并不确定640一定表示是宽或者480一定表示是高
-    session.sessionPreset = AVCaptureSessionPreset640x480;  // 这个是用来设置采集画面的分辨率的
+    // 注意这个尺寸仅仅是用来说明采集的视频的尺寸的宽高是那种
+    // 比如 640x480 描述的只是一个尺寸,但并不确定640一定表示是宽或者480一定表示是高
+    // 这个是用来设置采集画面的分辨率的
+    session.sessionPreset = AVCaptureSessionPreset640x480;
     
     self.captureSession = session;
     
@@ -67,12 +65,19 @@
     self.captureQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     [output setSampleBufferDelegate:self queue:self.captureQueue];
     //
-    NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange],
-                              kCVPixelBufferPixelFormatTypeKey,
-                              nil];
+//    @{(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]};
+//    NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:
+//                              [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange],
+//                              kCVPixelBufferPixelFormatTypeKey,
+//                              nil];
+    
+    // 设置像素的格式为YUV420p(即像素的颜色空间是YUV420p)  U分量个数 = V分量个数 = (1/4) * Y分量个数
+    // 软编码是这个像素的颜色空间是必须要设置的, 因为只有确定了采集的颜色空间,取像素时也需要使用相同的格式来取才正确
+    NSDictionary *settings = @{(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)};
 
     output.videoSettings = settings;
+    
+    // 是否允许丢弃一些来不及处理的帧
     output.alwaysDiscardsLateVideoFrames = YES;
     
     // 设置录制视频的方向
@@ -88,7 +93,11 @@
    connection.videoOrientation = AVCaptureVideoOrientationPortrait;
     
     
-    
+    // 特别特别注意: 宽度&高度
+    // 这个 宽度和高度直接决定软编码时数据的获取方式很重要
+    // 通过sessionPreset设置的值来确定尺寸大小
+    // 具体的宽高 依据 connection.videoOrientation 和 session.sessionPreset 这两个参数决定
+    [self.encoder setX264ResourceWithVideoWidth:480 height:640 bitrate:1500000];
     
     
     
@@ -112,6 +121,7 @@
 #pragma mark - 获取到数据
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     
+    // 拿到采集的数据
     [self.encoder encoderToH264:sampleBuffer];
 }
 

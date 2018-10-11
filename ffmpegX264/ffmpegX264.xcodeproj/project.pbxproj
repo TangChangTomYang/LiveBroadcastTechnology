@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F70F4DD216E44390014636F /* 视频解码流程图180926_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F70F4DC216E44390014636F /* 视频解码流程图180926_2.png */; };
 		2FE901932151B363006233A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE901922151B363006233A4 /* AppDelegate.m */; };
 		2FE901962151B363006233A4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE901952151B363006233A4 /* ViewController.m */; };
 		2FE901992151B363006233A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FE901972151B363006233A4 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 		2FE902352151C164006233A4 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE902342151C164006233A4 /* libiconv.tbd */; };
 		2FE902372151C174006233A4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE902362151C174006233A4 /* libz.tbd */; };
 		2FE902392151C197006233A4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE902382151C197006233A4 /* AVFoundation.framework */; };
+		2FF53EA3215C46F300D2EA16 /* YRFFmpegDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF53EA2215C46F300D2EA16 /* YRFFmpegDecoder.m */; };
 		2FF750C1215489C500DE5F3C /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750B3215489C400DE5F3C /* libavcodec.a */; };
 		2FF750C2215489C500DE5F3C /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750B4215489C400DE5F3C /* libavdevice.a */; };
 		2FF750C3215489C500DE5F3C /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750B5215489C400DE5F3C /* libavfilter.a */; };
@@ -29,9 +31,11 @@
 		2FF750C7215489C500DE5F3C /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750B9215489C400DE5F3C /* libswresample.a */; };
 		2FF750C8215489C500DE5F3C /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750BA215489C400DE5F3C /* libswscale.a */; };
 		2FF750C9215489C500DE5F3C /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF750C0215489C400DE5F3C /* libx264.a */; };
+		2FFCDA0F216D727800E7F64D /* 库头文件设置.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FFCDA0E216D727800E7F64D /* 库头文件设置.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F70F4DC216E44390014636F /* 视频解码流程图180926_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "视频解码流程图180926_2.png"; sourceTree = "<group>"; };
 		2FE9018E2151B363006233A4 /* ffmpegX264.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffmpegX264.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FE901912151B363006233A4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2FE901922151B363006233A4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -51,6 +55,8 @@
 		2FE902342151C164006233A4 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		2FE902362151C174006233A4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2FE902382151C197006233A4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2FF53EA1215C46F300D2EA16 /* YRFFmpegDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YRFFmpegDecoder.h; sourceTree = "<group>"; };
+		2FF53EA2215C46F300D2EA16 /* YRFFmpegDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YRFFmpegDecoder.m; sourceTree = "<group>"; };
 		2FF7504C215489C400DE5F3C /* avcodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avcodec.h; sourceTree = "<group>"; };
 		2FF7504D215489C400DE5F3C /* avfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avfft.h; sourceTree = "<group>"; };
 		2FF7504E215489C400DE5F3C /* d3d11va.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d3d11va.h; sourceTree = "<group>"; };
@@ -157,6 +163,7 @@
 		2FF750BD215489C400DE5F3C /* x264.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264.h; sourceTree = "<group>"; };
 		2FF750BE215489C400DE5F3C /* x264_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264_config.h; sourceTree = "<group>"; };
 		2FF750C0215489C400DE5F3C /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libx264.a; sourceTree = "<group>"; };
+		2FFCDA0E216D727800E7F64D /* 库头文件设置.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "库头文件设置.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,10 +213,12 @@
 			children = (
 				2FE901912151B363006233A4 /* AppDelegate.h */,
 				2FE901922151B363006233A4 /* AppDelegate.m */,
-				2FE902282151B3B0006233A4 /* Encoder */,
+				2FFCDA0D216D70B300E7F64D /* demo */,
+				2FE902282151B3B0006233A4 /* ffmpeg_X264_Lib */,
 				2FE901942151B363006233A4 /* ViewController.h */,
 				2FE901952151B363006233A4 /* ViewController.m */,
 				2FE901972151B363006233A4 /* Main.storyboard */,
+				2FFCDA0E216D727800E7F64D /* 库头文件设置.png */,
 				2FE9019A2151B363006233A4 /* Assets.xcassets */,
 				2FE9019C2151B363006233A4 /* LaunchScreen.storyboard */,
 				2FE9019F2151B363006233A4 /* Info.plist */,
@@ -218,17 +227,13 @@
 			path = ffmpegX264;
 			sourceTree = "<group>";
 		};
-		2FE902282151B3B0006233A4 /* Encoder */ = {
+		2FE902282151B3B0006233A4 /* ffmpeg_X264_Lib */ = {
 			isa = PBXGroup;
 			children = (
 				2FF75049215489C400DE5F3C /* FFmpeg-iOS */,
 				2FF750BB215489C400DE5F3C /* x264-iOS */,
-				2FE902292151B3DF006233A4 /* YRVideoCapture.h */,
-				2FE9022A2151B3DF006233A4 /* YRVideoCapture.m */,
-				2FE9022C2151B3F8006233A4 /* YRX264Manager.h */,
-				2FE9022D2151B3F8006233A4 /* YRX264Manager.m */,
 			);
-			path = Encoder;
+			path = ffmpeg_X264_Lib;
 			sourceTree = "<group>";
 		};
 		2FE9022F2151C138006233A4 /* Frameworks */ = {
@@ -459,6 +464,44 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		2FFCDA0A216D6F8C00E7F64D /* 解码(文件->屏幕显示) */ = {
+			isa = PBXGroup;
+			children = (
+				2FF53EA1215C46F300D2EA16 /* YRFFmpegDecoder.h */,
+				2FF53EA2215C46F300D2EA16 /* YRFFmpegDecoder.m */,
+				2F70F4DC216E44390014636F /* 视频解码流程图180926_2.png */,
+			);
+			path = "解码(文件->屏幕显示)";
+			sourceTree = "<group>";
+		};
+		2FFCDA0B216D700100E7F64D /* 编码(x264视频压缩) */ = {
+			isa = PBXGroup;
+			children = (
+				2FE9022C2151B3F8006233A4 /* YRX264Manager.h */,
+				2FE9022D2151B3F8006233A4 /* YRX264Manager.m */,
+			);
+			path = "编码(x264视频压缩)";
+			sourceTree = "<group>";
+		};
+		2FFCDA0C216D704300E7F64D /* 视频采集 */ = {
+			isa = PBXGroup;
+			children = (
+				2FE902292151B3DF006233A4 /* YRVideoCapture.h */,
+				2FE9022A2151B3DF006233A4 /* YRVideoCapture.m */,
+			);
+			path = "视频采集";
+			sourceTree = "<group>";
+		};
+		2FFCDA0D216D70B300E7F64D /* demo */ = {
+			isa = PBXGroup;
+			children = (
+				2FFCDA0C216D704300E7F64D /* 视频采集 */,
+				2FFCDA0B216D700100E7F64D /* 编码(x264视频压缩) */,
+				2FFCDA0A216D6F8C00E7F64D /* 解码(文件->屏幕显示) */,
+			);
+			path = demo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -518,6 +561,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FE9019E2151B363006233A4 /* LaunchScreen.storyboard in Resources */,
+				2F70F4DD216E44390014636F /* 视频解码流程图180926_2.png in Resources */,
+				2FFCDA0F216D727800E7F64D /* 库头文件设置.png in Resources */,
 				2FE9019B2151B363006233A4 /* Assets.xcassets in Resources */,
 				2FE901992151B363006233A4 /* Main.storyboard in Resources */,
 			);
@@ -534,6 +579,7 @@
 				2FE9022E2151B3F8006233A4 /* YRX264Manager.m in Sources */,
 				2FE9022B2151B3DF006233A4 /* YRVideoCapture.m in Sources */,
 				2FE901A12151B363006233A4 /* main.m in Sources */,
+				2FF53EA3215C46F300D2EA16 /* YRFFmpegDecoder.m in Sources */,
 				2FE901932151B363006233A4 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -669,15 +715,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/ffmpegX264/Encoder/FFmpeg-iOS/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/ffmpegX264/ffmpeg_X264_Lib/FFmpeg-iOS/include";
 				INFOPLIST_FILE = ffmpegX264/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ffmpegX264/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/ffmpegX264/x264-iOS/lib",
-					"$(PROJECT_DIR)/ffmpegX264/Encoder/FFmpeg-iOS/lib",
-					"$(PROJECT_DIR)/ffmpegX264/Encoder/x264-iOS/lib",
+					"$(PROJECT_DIR)/ffmpegX264/ffmpeg_X264_Lib/FFmpeg-iOS/lib",
+					"$(PROJECT_DIR)/ffmpegX264/ffmpeg_X264_Lib/x264-iOS/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = yr.ffmpegX264;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -690,15 +736,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/ffmpegX264/Encoder/FFmpeg-iOS/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/ffmpegX264/ffmpeg_X264_Lib/FFmpeg-iOS/include";
 				INFOPLIST_FILE = ffmpegX264/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ffmpegX264/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/ffmpegX264/x264-iOS/lib",
-					"$(PROJECT_DIR)/ffmpegX264/Encoder/FFmpeg-iOS/lib",
-					"$(PROJECT_DIR)/ffmpegX264/Encoder/x264-iOS/lib",
+					"$(PROJECT_DIR)/ffmpegX264/ffmpeg_X264_Lib/FFmpeg-iOS/lib",
+					"$(PROJECT_DIR)/ffmpegX264/ffmpeg_X264_Lib/x264-iOS/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = yr.ffmpegX264;
 				PRODUCT_NAME = "$(TARGET_NAME)";

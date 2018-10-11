@@ -16,6 +16,10 @@
 
 #import "YRX264Manager.h"
 
+/*说明,在C++ 使用用C语言头文件必须使用 'extern "C" { };' 包裹起来
+ 下面的意思是, 如果在C++中用下面的头文件就用 'extern "C" { };' 包裹起来,在C语言中就不用包裹
+ */
+// 这是一个宏定义
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,7 +28,8 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
-    
+
+// 这也是一个宏定义
 #ifdef __cplusplus
 };
 #endif
@@ -39,15 +44,19 @@ extern "C" {
 
 @implementation YRX264Manager
 {
-    /**AVFormatContext是一个贯穿始终的数据结构，很多函数都要用到它作为参数。
-     主要有: 输入数据的封装格式(AVInputFormat),输入数据的缓存,视音频流及视音频流个数,文件名,比特率,元数据等等
-     它是FFMPEG解封装（flv，mp4，rmvb，avi）功能的结构体*/
+    /**AVFormatContext(称作封装格式上下文或输入输出封装格式上下文)是一个贯穿始终的数据结构，很多函数都要用到它作为参数。
+     主要有:
+     (1)输入数据的封装格式(AVInputFormat),输入数据的缓存,视音频流及视音频流个数,文件名,比特率,元数据等等
+     它是FFMPEG解封装（flv，mp4，rmvb，avi）功能的结构体
+     (2)输出数据的封装格式(AVOutputFormat)
+     */
     AVFormatContext                     *pFormatCtx;
     
-    AVOutputFormat                      *fmt;
+    /** 输出封装格式上下文  */
+    AVOutputFormat                      *outputFormat;
    
     
-    /**AVStream是存储每一个视频/音频流信息的结构体,每个AVStream对应一个AVCcodecContext*/
+    /**AVStream是存储一个视频或音频码流(H264等)信息的结构体,每个AVStream对应一个AVCcodecContext*/
     AVStream                            *video_st;
     /**每个 AVCodecContext中对应一个AVCodec, 主要有,编解码器的类型(视频,音频), 视频的宽度高度等信息*/
     AVCodecContext                      *pCodecCtx;
@@ -70,6 +79,16 @@ extern "C" {
     int                                  encoder_h264_frame_height; // 编码的图像高度
 }
 
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        // 检查ffmpeg 是否配置成功, 有打印就配置成功了
+        printf("%s",avcodec_configuration());
+    }
+    return self;
+}
 
 
 /*
@@ -99,15 +118,18 @@ extern "C" {
 
 /*
  *  设置X264
+ *  bitrate 码率
  */
 - (int)setX264ResourceWithVideoWidth:(int)width height:(int)height bitrate:(int)bitrate
 {
-    // 1.默认从第0帧开始(记录当前的帧数)
-    framecnt = 0;
-    
-    // 2.记录传入的宽度&高度
+    // 1.记录传入的视频采集宽度&高度
     encoder_h264_frame_width = width;
     encoder_h264_frame_height = height;
+    
+    // 2.默认从第0帧开始(记录当前的帧数)
+    framecnt = 0;
+    
+   
     
     // 3.注册FFmpeg所有编解码器(无论编码还是解码都需要该步骤)
     // 你看见的凡是av 开头的基本都是ffmpeg 里面的方法
@@ -116,11 +138,14 @@ extern "C" {
     // 4.初始化AVFormatContext: 用作之后写入视频帧并编码成 h264，贯穿整个工程当中(释放资源时需要销毁)
     pFormatCtx = avformat_alloc_context();
     
-    // 5.设置输出文件的路径
-    fmt = av_guess_format(NULL, out_file, NULL);
-    pFormatCtx->oformat = fmt;
+    // 5.根据输出文件的路径(文件名)获取最匹配的 outputFormat 输出分装格式
+    // outputFormat 与 AVInputFormat 对应, 都是表示的是封装格式信息,outputFormat 控制输出封装格式, AVInputFormat是输入封装格式
+    outputFormat = av_guess_format(NULL, out_file, NULL);
+    //5.1 设置封装上下文
+    pFormatCtx->oformat = outputFormat;
     
     // 6.打开文件的缓冲区输入输出，flags 标识为  AVIO_FLAG_READ_WRITE ，可读写
+    // pb(输入数据的缓存 AVIOContext)
     if (avio_open(&pFormatCtx->pb, out_file, AVIO_FLAG_READ_WRITE) < 0){
         printf("Failed to open output file! \n");
         return -1;
@@ -129,20 +154,21 @@ extern "C" {
     // 7.创建新的输出流, 用于写入文件
     video_st = avformat_new_stream(pFormatCtx, 0);
     
-    // 8.设置 20 帧每秒 ，也就是 fps 为 20
+    // 8.设置 25 帧每秒 ，也就是 fps 为 25
     video_st->time_base.num = 1;
-    video_st->time_base.den = 25;
+    video_st->time_base.den = 25 ;
     
     if (video_st==NULL){
         return -1;
     }
     
-    // 9.pCodecCtx 用户存储编码所需的参数格式等等
-    // 9.1.从媒体流中获取到编码结构体，他们是一一对应的关系，一个 AVStream 对应一个  AVCodecContext
+
+    // 9.1.从媒体流(AVStream)中获取到编解码器上下文，他们是一一对应的关系. 一个 AVStream 对应一个AVCodecContext (编解码器上下文中有编解码器 和编解码器类型等信息)
     pCodecCtx = video_st->codec;
     
     // 9.2.设置编码器的编码格式(是一个id)，每一个编码器都对应着自己的 id，例如 h264 的编码 id 就是 AV_CODEC_ID_H264
-    pCodecCtx->codec_id = fmt->video_codec;
+    // outputFormat(输出封装格式), 里面有 视频/音频解码器的的ID信息
+    pCodecCtx->codec_id = outputFormat->video_codec;
     
     // 9.3.设置编码类型为 视频编码
     pCodecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
@@ -166,7 +192,8 @@ extern "C" {
     pCodecCtx->qmax = 51;
     
     // 9.9.设置图像组层的大小(GOP-->两个I帧之间的间隔)
-    pCodecCtx->gop_size = 30;
+    // gop_size 设置的太大的话,如果前一帧解析错误,后一帧成功解析要花更长的时间
+    pCodecCtx->gop_size = 50;
     
     // 9.10.设置 B 帧最大的数量，B帧为视频图片空间的前后预测帧， B 帧相对于 I、P 帧来说，压缩率比较大，也就是说相同码率的情况下，
     // 越多 B 帧的视频，越清晰，现在很多打视频网站的高清视频，就是采用多编码 B 帧去提高清晰度，
@@ -226,6 +253,7 @@ extern "C" {
 - (void)encoderToH264:(CMSampleBufferRef)sampleBuffer
 {
     // 1.通过CMSampleBufferRef对象获取CVPixelBufferRef对象
+    // (即 将CMSampleBufferRef 转换成为ImageBuffer)
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
     // 2.锁定imageBuffer内存地址开始进行编码

@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "YRVideoCapture.h"
+#import "YRX264Manager.h"
 
 @interface ViewController ()
 
@@ -20,23 +21,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-}
-
-- (IBAction)startCapture {
-    [self.videoCapture startCapture:self.view];
-}
-
-- (IBAction)stopCapture {
-    [self.videoCapture stopCapture];
-}
-
-- (YRVideoCapture *)videoCapture {
-    if (_videoCapture == nil) {
-        _videoCapture = [[YRVideoCapture alloc] init];
-    }
     
-    return _videoCapture;
+    [YRX264Manager new];
 }
+
+//- (IBAction)startCapture {
+//    [self.videoCapture startCapture:self.view];
+//}
+//
+//- (IBAction)stopCapture {
+//    [self.videoCapture stopCapture];
+//}
+//
+//- (YRVideoCapture *)videoCapture {
+//    if (_videoCapture == nil) {
+//        _videoCapture = [[YRVideoCapture alloc] init];
+//    }
+//
+//    return _videoCapture;
+//}
 
 @end
 
