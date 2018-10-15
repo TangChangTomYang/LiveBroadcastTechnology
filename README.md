@@ -13,3 +13,7 @@ iOS  直播技术
 #### VideoToolBox 硬编码视频采集demo
 
 #### ffmpeg + x264 软编码demo
+
+#### YRFaceRecognitionDemo 人脸识别
+
+![人脸识别](/imgs/YRFaceRecognition.PNG)
